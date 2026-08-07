@@ -82,3 +82,88 @@
 // =============================================================================
 
 
+const readlineSync = require('readline-sync');
+
+let tasks = [];
+
+// Displays the menu options
+function displayMenu() {
+  console.log("\n============================");
+  console.log("     TO-DO LIST MENU");
+  console.log("============================");
+  console.log("1. Add task");
+  console.log("2. View tasks");
+  console.log("3. Delete task");
+  console.log("4. Quit");
+}
+
+// Adds a new task to the list
+function addTask() {
+  const task = readlineSync.question("Enter task: ");
+  tasks.push(task);
+  console.log(`Task added: "${task}"`);
+}
+
+// Displays all tasks currently in the list
+function viewTasks() {
+  if (tasks.length === 0) {
+    console.log("Your to-do list is empty!");
+    return;
+  }
+
+  console.log("Your Tasks:");
+  for (let i = 0; i < tasks.length; i++) {
+    console.log(`${i + 1}. ${tasks[i]}`);
+  }
+}
+
+// Deletes a task by its displayed number
+function deleteTask() {
+  if (tasks.length === 0) {
+    console.log("Your to-do list is empty!");
+    return;
+  }
+
+  viewTasks();
+  const taskNumber = readlineSync.questionInt("Enter task number to delete: ");
+  const index = taskNumber - 1;
+
+  if (index < 0 || index >= tasks.length) {
+    console.log("Error: Invalid task number.");
+    return;
+  }
+
+  const removedTask = tasks[index];
+  tasks.splice(index, 1);
+  console.log(`Task "${removedTask}" has been removed.`);
+}
+
+// Main program logic
+function main() {
+  let running = true;
+
+  while (running) {
+    displayMenu();
+    const choice = readlineSync.questionInt("Enter your choice (1-4): ");
+
+    switch (choice) {
+      case 1:
+        addTask();
+        break;
+      case 2:
+        viewTasks();
+        break;
+      case 3:
+        deleteTask();
+        break;
+      case 4:
+        console.log("Goodbye!");
+        running = false;
+        break;
+      default:
+        console.log("Error: Invalid choice. Please enter a number between 1 and 4.");
+    }
+  }
+}
+
+main();
